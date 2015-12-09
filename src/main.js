@@ -8,14 +8,14 @@ angular.module('restopoly').config(function($stateProvider, $urlRouterProvider) 
         url: '/login',
         templateUrl: 'src/login/login.html',
         controller: 'LoginController'
-    });/*.state('lobby', {
-        url: '/lobby',
-        templateUrl: 'src/lobby/lobby.html',
-        controller: 'LobbyController'
     }).state('gameselect', {
         url: '/game/select',
         templateUrl: 'src/game/select.html',
         controller: 'GameSelectController'
+    });/*.state('lobby', {
+        url: '/lobby',
+        templateUrl: 'src/lobby/lobby.html',
+        controller: 'LobbyController'
     }).state('gamecreate', {
         url: '/game/create',
         templateUrl: 'src/game/create.html',
