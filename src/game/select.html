@@ -1,5 +1,21 @@
-<div>
+<div class="container col-md-6 col-md-offset-3">
+    <div>
+        Name: <p ng-bind="user.name"></p>
+        <div class="pull-right">
+            <button class="btn btn-info" ng-click="refresh()">Refresh</button>
+            <button class="btn btn-info" ng-click="create()">Create Game</button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="panel" ng-repeat="game in games | startFrom:(currentPage-1)*10 | limitTo:10" ng-class="{ 'panel-success' : game.started}">
+            <div class="panel-heading">
+                <a href="#/game/{{game.gameid}}/lobby">Game {{game.gameid}}</a>
+                <button type="button" class="btn btn-primary btn-sm pull-right" ng-if="!game.started" ng-click="join(game.gameid)">Join</button>
+            </div>
+            <div class="panel-body">
+                Players: <ul class="list-unstyled"><li ng-repeat="player in game.players">{{player.name}}</li></ul>
+            </div>
+        </div>
+    </div>
     <uib-pagination total-items="totalItems" ng-model="currentPage">
-        
     </uib-pagination>
 </div>

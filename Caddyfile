@@ -1,1 +1,4 @@
 localhost:8080
+proxy /game localhost:4567
+proxy /games localhost:4567
+proxy /boards localhost:4568

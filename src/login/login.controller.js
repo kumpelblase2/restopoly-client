@@ -1,8 +1,11 @@
-angular.module('restopoly').controller('LoginController', ['$scope', 'UserData', '$state', function($scope, UserData, $state) {
-    $scope.user = "";
+angular.module('restopoly').controller('LoginController', ['$scope', '$rootScope', '$state', function($scope, $rootScope, $state) {
+    $scope.name = "";
 
     $scope.login = function() {
-        UserData.user = $scope.user;
+        $rootScope.user = {
+            name: $scope.name,
+            id: $scope.name.toLowerCase().replace(' ', '_')
+        };
         $state.go('gameselect');
     };
 }]);

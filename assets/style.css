@@ -1,6 +1,9 @@
-html,
-body {
+html,body {
   background: #efefef;
   padding: 10px;
   font-family: 'Varela Round';
+}
+
+p {
+    display: inline;
 }

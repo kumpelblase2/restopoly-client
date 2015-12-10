@@ -12,11 +12,11 @@ angular.module('restopoly').config(function($stateProvider, $urlRouterProvider) 
         url: '/game/select',
         templateUrl: 'src/game/select.html',
         controller: 'GameSelectController'
-    });/*.state('lobby', {
-        url: '/lobby',
-        templateUrl: 'src/lobby/lobby.html',
-        controller: 'LobbyController'
-    }).state('gamecreate', {
+    }).state('gamelobby', {
+        url: '/game/:id/lobby',
+        templateUrl: 'src/game/lobby.html',
+        controller: 'GameLobbyController'
+    });/*.state('gamecreate', {
         url: '/game/create',
         templateUrl: 'src/game/create.html',
         controller: 'GameCreateController'
