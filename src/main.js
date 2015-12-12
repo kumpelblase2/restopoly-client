@@ -16,13 +16,9 @@ angular.module('restopoly').config(function($stateProvider, $urlRouterProvider) 
         url: '/game/:id/lobby',
         templateUrl: 'src/game/lobby.html',
         controller: 'GameLobbyController'
-    });/*.state('gamecreate', {
-        url: '/game/create',
-        templateUrl: 'src/game/create.html',
-        controller: 'GameCreateController'
-    }).state('game', {
-        url: '/game/play/:gameid',
+    });.state('game', {
+        url: '/game/:gameid/play',
         templateUrl: 'src/game/play.html',
         controller: 'GamePlayController'
-    });*/
+    });
 });

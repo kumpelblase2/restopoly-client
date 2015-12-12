@@ -1,8 +1,8 @@
 <div class="container col-md-6 col-md-offset-3">
     <div class="panel">
         <div class="panel-heading clearfix">
-            Game <p ng-bind="game"></p>
-            <div class="pull-right"><p ng-bind="players.length"></p> Players
+            Game <p ng-bind="gameid"></p>
+            <div class="pull-right"><p ng-bind="game.players.length"></p> Players
             <button type="button" class="btn btn-info" ng-click="refresh()">Refresh</button>
             </div>
         </div>
@@ -13,7 +13,7 @@
                     <th>Ready?</th>
                 </theader>
                 <tbody>
-                    <tr ng-repeat="player in players">
+                    <tr ng-repeat="player in game.players">
                         <td>{{player.name}}</td>
                         <td>{{player.ready}}</td>
                     </tr>

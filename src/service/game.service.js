@@ -26,8 +26,14 @@ angular.module('restopoly').factory('GameService', ['$http', 'GAMES_IP', functio
         },
         setPlayerReady: function(id, userid) {
             return $http({
-                method: 'POST',
-
+                method: 'PUT',
+                url: GAME_URL + '/games/' + id + '/players/' + userid + '/ready'
+            });
+        },
+        getGame: function(id) {
+            return $http({
+                method: 'GET',
+                url: GAME_URL + '/games/' + id
             });
         }
     };

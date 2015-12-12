@@ -1,12 +1,21 @@
-angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameService', '$rootScope', function($scope, GameService, $rootScope) {
+angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameService', '$rootScope', '$state', function($scope, GameService, $rootScope, $state) {
     $scope.games = [];
     $scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.user = $rootScope.user;
 
     $scope.join = function(id) {
+        var gamesWithId = $scope.games.filter(function(game) { return game.id == id; });
+        if(gamesWithId.length > 0) {
+            var game = gamesWithId[0];
+            if(game.players.filter(function(player) { return player.id == $scope.user.id; }).length > 0) {
+                $state.go('gamelobby', { id: id });
+                return;
+            }
+        }
+
         GameService.joinGame(id, $scope.user.id, $scope.user.name).then(function() {
-            console.log('joined');
+            $state.go('gamelobby', { id: id });
         });
     };
 

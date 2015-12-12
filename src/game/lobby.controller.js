@@ -1,47 +1,47 @@
 angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', function($scope, GameService, $rootScope, $stateParams, $state) {
-    $scope.game = $stateParams.id;
-    $scope.players = [];
+    $scope.gameid = $stateParams.id;
+    $scope.game = {
+    };
 
     $scope.refresh = function() {
-        GameService.getPlayersForGame($scope.game).then(function(game) {
-            $scope.players = game.data;
-            var allReady = true;
-            game.data.forEach(function(player) {
-                if(!player.ready) {
-                    allReady = false;
-                }
-            });
-
-            if(allReady) {
-                $state.go('/game/' + $scope.game + '/game');
+        GameService.getGame($scope.gameid).then(function(game) {
+            $scope.game = game.data;
+            if($scope.game.started) {
+                $state.go('game', { id: $scope.gameid });
             }
         });
     };
 
     $scope.ready = function() {
         var isReady = false;
-        $scope.players.forEach(function(player) {
-            if(player.id != 'undefined' && player.id == $rootScope.user.id) {
-                isReady = player.ready;
-            }
-        });
+        if($scope.game.players) {
+            $scope.game.players.forEach(function(player) {
+                if(player.id != 'undefined' && player.id == $rootScope.user.id) {
+                    isReady = player.ready;
+                }
+            });
+        }
 
         return isReady;
     };
 
     $scope.isInGame = function() {
         var contains = false;
-        $scope.players.forEach(function(player) {
-            if(player.id != 'undefined' && player.id == $rootScope.user.id) {
-                contains = true;
-            }
-        });
+        if($scope.game.players) {
+            $scope.game.players.forEach(function(player) {
+                if(player.id != 'undefined' && player.id == $rootScope.user.id) {
+                    contains = true;
+                }
+            });
+        }
 
         return contains;
     }
 
     $scope.setReady = function() {
-
+        GameService.setPlayerReady($scope.gameid, $rootScope.user.id).then(function() {
+            $scope.refresh();
+        });
     };
 
     $scope.refresh();
