@@ -11,14 +11,15 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+app.PlayerStore = require('./lib/player-store')();
+
 var events = require('./routes/websocket');
-var users = require('./routes/users');
+var game = require('./routes/client_game');
+require('./routes/websocket_init')(app.PlayerStore, io, [game]);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-app.PlayerStore = require('./lib/player-store')();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -26,7 +27,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', users);
 app.use('/event', events(app));
 
 // catch 404 and forward to error handler
@@ -67,7 +67,7 @@ var resolver = require('./lib/service-resolver');
 resolver('https://vs-docker.informatik.haw-hamburg.de/ports/8053', [
     { value: 'games' },
     { value: 'boards' }
-]).then(function() {
+]).then(function(hosts) {
     server.listen(port, function() {
         console.log('listening on ' + port);
     });
