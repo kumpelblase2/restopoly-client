@@ -1,15 +1,10 @@
-angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', function($scope, GameService, $rootScope, $stateParams, $state) {
+angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', 'wss', function($scope, GameService, $rootScope, $stateParams, $state, wss) {
     $scope.gameid = $stateParams.id;
     $scope.game = {};
 
-    $scope.refresh = function() {
-        GameService.getGame($scope.gameid).then(function(game) {
-            $scope.game = game.data;
-            if($scope.game.started) {
-                $state.go('game', { id: $scope.gameid });
-            }
-        });
-    };
+    wss.on('turn', function() {
+        console.log('My Turn!');
+    });
 
     $scope.refresh();
 }]);

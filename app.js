@@ -1,6 +1,7 @@
 // Just workaround
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+/* Server stuff */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,15 +12,11 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-app.PlayerStore = require('./lib/player-store')();
+/* Libs */
+app.PlayerStore = new (require('./lib/player-store'))();
 
+/* Routes */
 var events = require('./routes/websocket');
-var game = require('./routes/client_game');
-require('./routes/websocket_init')(app.PlayerStore, io, [game]);
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -43,10 +40,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
+    console.log(err);
   });
 }
 
@@ -54,21 +48,13 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  console.log(err);
 });
 
 var port = parseInt(process.env.PORT || '3000');
 app.set('port', port);
 
-var resolver = require('./lib/service-resolver');
-resolver('https://vs-docker.informatik.haw-hamburg.de/ports/8053', [
-    { value: 'games' },
-    { value: 'boards' }
-]).then(function(hosts) {
-    server.listen(port, function() {
-        console.log('listening on ' + port);
-    });
+require('./routes/websocket_init')(app.PlayerStore, io);
+server.listen(port, function() {
+    console.log('listening on ' + port);
 });

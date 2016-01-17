@@ -2,17 +2,17 @@ var router = require('express').Router();
 
 module.exports = function(app) {
     router.post('/:player/player/turn', function(req, res) {
-        var playerId = req.params.id;
+        var playerId = req.params.player;
         var player = app.PlayerStore.getPlayer(playerId);
         if(player) {
-            player.socket.send('turn');
+            player.socket.emit('turn');
             res.status(200).end();
         } else {
             res.status(404).end();
         }
     });
     router.post('/:player/player/event', function(req, res) {
-        var playerId = req.params.id;
+        var playerId = req.params.player;
         var player = app.PlayerStore.getPlayer(playerId);
         if(player) {
             player.socket.send('event', req.body);
@@ -22,7 +22,7 @@ module.exports = function(app) {
         }
     });
     router.get('/:player/player', function() {
-        var playerId = req.params.id;
+        var playerId = req.params.player;
         var player = app.PlayerStore.getPlayer(playerId);
         if(player) {
             res.send({

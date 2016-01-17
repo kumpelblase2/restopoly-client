@@ -1,4 +1,4 @@
-module.exports = function(playerStore, io, handler) {
+module.exports = function(playerStore, io) {
     io.on('connection', function(socket) {
         socket.on('register', function(data) {
             data.socket = socket;
@@ -6,7 +6,5 @@ module.exports = function(playerStore, io, handler) {
             console.log(data);
             playerStore.addPlayer(data);
         });
-
-        handler(socket);
     });
 };

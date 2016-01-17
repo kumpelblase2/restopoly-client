@@ -1,10 +1,5 @@
-angular.module('restopoly').factory('wss', ['EVENTS_IP', function(EVENTS_IP) {
-    var socket = new SockJS(EVENTS_IP + '/events/ws');
-    var stompClient = Stomp.over(socket);
-    stompClient.connect({}, function(frame) {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-    });
+var app = angular.module('restopoly');
 
-    return stompClient;
+app.factory('wss', ['socketFactory', function(socketFactory) {
+    return socketFactory();
 }]);
