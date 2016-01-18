@@ -5,7 +5,9 @@ module.exports = function(app) {
         var playerId = req.params.player;
         var player = app.PlayerStore.getPlayer(playerId);
         if(player) {
-            player.socket.emit('turn');
+            setTimeout(function() {
+                player.socket.emit('turn');
+            }, 500);
             res.status(200).end();
         } else {
             res.status(404).end();

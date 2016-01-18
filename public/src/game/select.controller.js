@@ -4,9 +4,9 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
     $scope.currentPage = 1;
     $scope.user = $rootScope.user;
 
-    $scope.join = function() {
+    $scope.open = function(game) {
         GameService.joinGame($scope.user.id, $scope.user.name || $scope.user.id).then(function() {
-            $state.go('gamelobby');
+            $state.go('gamelobby', { id: game.gameid });
         });
     };
 
@@ -22,8 +22,7 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
     $scope.create = function() {
         GameService.createGame().then(function(response) {
             console.log('created');
-            var gameurl = response.data;
-            console.log(gameurl);
+            var gameurl = response
             $rootScope.components = angular.copy($rootScope.ips);
             $rootScope.components.game = $rootScope.components.game + gameurl;
             return gameurl;
@@ -33,6 +32,7 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
                 var game = response.data;
                 $rootScope.components = game.components;
                 $rootScope.components.players = $rootScope.ips.game + game.players;
+                $scope.refresh();
                 $scope.join();
             });
         });
@@ -41,7 +41,6 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
     $scope.refresh = function() {
         GameService.getGames().then(function(games) {
             var all = [];
-
             games.forEach(function(game) {
                 (function() {
                     var joinUrl = game.players;

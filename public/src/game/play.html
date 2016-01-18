@@ -1,3 +1,30 @@
 <div class="container">
-
+    <div class="panel">
+        <div class="panel-heading clearfix">
+            Game <p ng-bind="game.gameid"></p>
+            <div class="pull-right"><p ng-bind="game_players.length"></p> Players
+            <button type="button" class="btn btn-info" ng-click="refresh()">Refresh</button>
+            </div>
+        </div>
+        <div class="panel-content">
+            <button type="button" class="btn btn-info" ng-click="startTurn()">Start</button>
+            <button type="button" class="btn btn-info" ng-click="roll()">Roll</button>
+            <button type="button" class="btn btn-info" ng-click="buy()">Buy</button>
+            <button type="button" class="btn btn-info" ng-click="end()">End</button>
+            <table class="table">
+                <theader>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Players</th>
+                </theader>
+                <tbody>
+                    <tr ng-repeat="place in board.fields">
+                        <td>{{$index}}</td>
+                        <td>{{place.place}}</td>
+                        <td>{{getPlayersOnField($index)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

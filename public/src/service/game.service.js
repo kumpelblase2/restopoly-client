@@ -1,4 +1,6 @@
 angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q', function($http, $rootScope, $q) {
+    var emptyTransformer = [function (data) { return data; }];
+
     return {
         getGames: function() {
             var self = this;
@@ -20,7 +22,8 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
                 url: $rootScope.ips.game + '/games',
                 data: {
                     components: $rootScope.ips
-                }
+                },
+                transformResponse: emptyTransformer,
             }).then(function(response) { return response.data; });
         },
         joinGame: function(userid, username) {
@@ -89,6 +92,26 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
                 method: 'GET',
                 url: $rootScope.ips.game + url
             }).then(function(response) { return response.data; });
+        },
+        checkPlayerReady: function(readyUrl) {
+            return $http({
+                method: 'GET',
+                url: $rootScope.ips.game + readyUrl,
+                responseTransformers: emptyTransformer
+            }).then(function(response) { return response.data });
+        },
+        acquireMutex: function() {
+            return $http({
+                method: 'PUT',
+                url: $rootScope.components.game + "/players/turn?player=" + $rootScope.user.id.toLowerCase(),
+                data: $rootScope.user
+            });
+        },
+        releaseMutex: function(player) {
+            return $http({
+                method: 'PUT',
+                url: $rootScope.ips.game + player.ready
+            });
         }
     };
 }]);

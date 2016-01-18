@@ -1,4 +1,4 @@
-angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', 'wss', function($scope, GameService, $rootScope, $stateParams, $state, wss) {
+angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', 'wss', '$q', function($scope, GameService, $rootScope, $stateParams, $state, wss, $q) {
     $scope.gameid = $stateParams.id;
     $scope.game = {
     };
@@ -15,6 +15,8 @@ angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameSe
             return GameService.getPlayersByUrl(playersUrl).then(function(players) {
                 $scope.game.players = players;
                 return players;
+            }).then(function() {
+                $scope.updatePlayersReady();
             });
         });
     };
@@ -30,6 +32,20 @@ angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameSe
         }
 
         return isReady;
+    };
+
+    $scope.updatePlayersReady = function() {
+        var players = [];
+        $scope.game.players.forEach(function(player) {
+            var newPlayer = angular.copy(player);
+            players.push(GameService.checkPlayerReady(player.ready).then(function(isReady) {
+                newPlayer.is_ready = isReady;
+                return newPlayer;
+            }));
+        });
+        $q.all(players).then(function(players) {
+            $scope.game.players = players;
+        });
     };
 
     $scope.isInGame = function() {
@@ -52,7 +68,11 @@ angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameSe
     };
 
     wss.on('turn', function() {
-        console.log('My Turn!');
+        alert("The game started and it's your turn, hurry up!");
+        console.log("Turn in lobby");
+        $scope.$apply(function() {
+            $state.go('game', { id: $scope.gameid });
+        });
     });
 
     $scope.refresh();
