@@ -7,24 +7,30 @@
             </div>
         </div>
         <div class="panel-content">
-            <button type="button" class="btn btn-info" ng-click="startTurn()">Start</button>
-            <button type="button" class="btn btn-info" ng-click="roll()">Roll</button>
-            <button type="button" class="btn btn-info" ng-click="buy()">Buy</button>
-            <button type="button" class="btn btn-info" ng-click="end()">End</button>
-            <table class="table">
-                <theader>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Players</th>
-                </theader>
-                <tbody>
-                    <tr ng-repeat="place in board.fields">
-                        <td>{{$index}}</td>
-                        <td>{{place.place}}</td>
-                        <td>{{getPlayersOnField($index)}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <button type="button" class="btn btn-info" ng-click="startTurn()">Start</button>
+                <button type="button" class="btn btn-info" ng-click="roll()">Roll</button>
+                <button type="button" class="btn btn-info" ng-click="buy()">Buy</button>
+                <button type="button" class="btn btn-info" ng-click="end()">End</button>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <theader>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Players</th>
+                        <th>Owner</th>
+                    </theader>
+                    <tbody>
+                        <tr ng-repeat="place in board.fields">
+                            <td>{{$index}}</td>
+                            <td>{{place.name || place.place || $index}}</td>
+                            <td>{{getPlayersOnField($index).join(',')}}</td>
+                            <td>{{place.owner || '-'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -10,6 +10,14 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
     wss.on('turn', function() {
         $scope.$apply(function() {
             $scope.startTurn();
+            $scope.refresh();
+        });
+    });
+
+    wss.on('event', function(ev) {
+        alert("Uh, something happened: " + ev);
+        $scope.$apply(function() {
+            $scope.refresh();
         });
     });
 
@@ -36,6 +44,24 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
                         $scope.board_player = player;
                     }
                 });
+            }).then(function() {
+                var allPlaces = [];
+                $scope.board.fields.forEach(function(field) {
+                    allPlaces.push(BoardService.getPlace(field.place).then(function(place) {
+                        return place.players = field.players;
+                    }));
+                });
+                return $q.all(allPlaces);
+            }).then(function(places) {
+                var allOwners = [];
+                places.forEach(function(place) {
+                    allOwners.push(BrokerService.getOwner(place).then(function(owner) {
+                        place.owner = owner;
+                        return place;
+                    }));
+                });
+
+                return $q.all(allOwners);
             });
         });
     };
@@ -53,7 +79,10 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
     };
 
     $scope.buy = function() {
-
+        var field = $scope.getCurrentField($scope.player);
+        BrokerService.buy(field, $scope.player).then(function() {
+            $scope.refresh();
+        });
     };
 
     $scope.end = function() {
@@ -69,6 +98,11 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
         }
 
         return all;
+    };
+
+    $scope.getCurrentField = function(player) {
+        var pos = $scope.board.positions[player.id];
+        return $scope.board.fields[pos];
     };
 
     $scope.refresh();
