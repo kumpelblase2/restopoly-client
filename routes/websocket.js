@@ -7,6 +7,7 @@ module.exports = function(app) {
         if(player) {
             setTimeout(function() {
                 player.socket.emit('turn');
+                console.log(player.socket.id);
             }, 500);
             res.status(200).end();
         } else {

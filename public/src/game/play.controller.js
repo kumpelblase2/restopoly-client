@@ -6,6 +6,7 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
     $scope.game_players = [];
     $scope.game_player = {};
     $scope.board_player = {};
+    $scope.current_player = { name: '' };
 
     wss.on('turn', function() {
         $scope.$apply(function() {
@@ -25,13 +26,17 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
         GameService.getGame().then(function(game) {
             $scope.game = game;
 
-            return GameService.getPlayers().then(function(players) {
+            return GameService.getPlayersByUrl(game.players).then(function(players) {
                 $scope.game_players = players;
                 $scope.game_players.forEach(function(player) {
                     if(player.id == $rootScope.user.id) {
                         $scope.game_player = player;
                     }
                 });
+            });
+        }).then(function() {
+            return GameService.getCurrentPlayer().then(function(player) {
+                $scope.current_player = player;
             });
         });
 

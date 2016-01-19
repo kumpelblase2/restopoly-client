@@ -37,19 +37,6 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
                 url: $rootScope.ips.game + url + '/' + userid + '?name=' + username + '&uri=http://localhost:3000/event/' + userid.toLowerCase()
             }).then(function(response) { return response.data });
         },
-        getPlayers: function() {
-            var self = this;
-            return $http({
-                method: 'GET',
-                url: $rootScope.components.players
-            }).then(function(response) {
-                var players = [];
-                response.data.forEach(function(playerUrl) {
-                    players.push(self.getPlayerByUrl(playerUrl));
-                });
-                return $q.all(players);
-            });
-        },
         getPlayersByUrl: function(playersUrl) {
             var self = this;
             return $http({
@@ -109,6 +96,12 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
                 method: 'PUT',
                 url: $rootScope.ips.game + player.ready
             });
+        },
+        getCurrentPlayer: function() {
+            return $http({
+                method: 'GET',
+                url: $rootScope.components.game + "/players/current"
+            }).then(function(response) { return response.data; });
         }
     };
 }]);

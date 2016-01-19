@@ -11,8 +11,6 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
     };
 
     $scope.joinGame = function(game) {
-        $rootScope.components = angular.copy($rootScope.ips);
-        $rootScope.components.game = $rootScope.components.game + '/games/' + game.gameid;
         var id = game.gameid;
         GameService.joinGameByUrl($scope.user.id, $scope.user.name || $scope.user.id, game.join_url).then(function() {
             $state.go('gamelobby', { id: id });
@@ -21,16 +19,15 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
 
     $scope.create = function() {
         GameService.createGame().then(function(response) {
-            var gameurl = response
+            var gameurl = response;
             $rootScope.components = angular.copy($rootScope.ips);
             $rootScope.components.game = $rootScope.components.game + gameurl;
             return gameurl;
         }).then(function(url) {
             return GameService.getGame().then(function(response) {
                 var game = response;
-                $rootScope.components = game.components;
-                $rootScope.components.players = $rootScope.ips.game + game.players;
                 $scope.refresh();
+                game.join_url = game.players;
                 $scope.joinGame(game);
             });
         });

@@ -68,8 +68,6 @@ angular.module('restopoly').controller('GameLobbyController', ['$scope', 'GameSe
     };
 
     wss.on('turn', function() {
-        alert("The game started and it's your turn, hurry up!");
-        console.log("Turn in lobby");
         $scope.$apply(function() {
             $state.go('game', { id: $scope.gameid });
         });
