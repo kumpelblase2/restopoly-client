@@ -41,6 +41,12 @@ angular.module('restopoly').factory('BoardService', ['$http', '$rootScope', '$q'
                 method: 'GET',
                 url: $rootScope.components.board
             }).then(function(response) { return response.data; });
+        },
+        getPlace: function(placeUrl) {
+            return $http({
+                method: 'GET',
+                url: $rootScope.ips.board + placeUrl
+            }).then(function(response) { return response.data; });
         }
     };
 }]);

@@ -2,7 +2,7 @@
     <div class="panel">
         <div class="panel-heading clearfix">
             Game <p ng-bind="game.gameid"></p>
-            <div class="pull-right"><p ng-bind="game_players.length"></p> Players
+            <div class="pull-right"><p ng-bind="board_players.length"></p> Players
             <button type="button" class="btn btn-info" ng-click="refresh()">Refresh</button>
             </div>
         </div>
@@ -26,7 +26,7 @@
                             <td>{{$index}}</td>
                             <td>{{place.name || place.place || $index}}</td>
                             <td>{{getPlayersOnField($index).join(',')}}</td>
-                            <td>{{place.owner || '-'}}</td>
+                            <td>{{place.owner.id || '-'}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -18,12 +18,13 @@ angular.module('restopoly').controller('LoginController', ['$scope', '$rootScope
             events: $scope.events_ip,
             board: $scope.boards_ip,
             dice: $scope.dice_ip,
-            broker: $scope.broker_ip
+            broker: $scope.broker_ip,
+            bank: $scope.bank_ip
         }
 
         $cookies.putObject('user', $rootScope.user);
         $cookies.putObject('ips', $rootScope.ips);
-
+        wss.emit('register', { id: $rootScope.user.id });
         $state.go('gameselect');
     };
 }]);

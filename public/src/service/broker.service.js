@@ -5,14 +5,20 @@ angular.module('restopoly').factory('BrokerService', ['$http', '$rootScope', '$q
         getOwner: function(field) {
             return $http({
                 method: 'GET',
-                url: $rootScope.ips.broker + field.broker
-            }).then(function(response) { return response.data; });
+                url: field.broker + '/owner'
+            }).then(function(response) { return response.data; }).catch(function(e) {
+                return {};
+            });
         },
         buy: function(field, player) {
             return $http({
-                method: 'PUT',
-                url: $rootScope.ips.broker + field.broker,
-                data: player
+                method: 'POST',
+                url: field.broker + '/owner',
+                data: {
+                    id: player.id,
+                    name: player.name,
+                    uri: player.uri
+                }
             });
         }
     };

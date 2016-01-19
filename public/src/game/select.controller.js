@@ -21,19 +21,17 @@ angular.module('restopoly').controller('GameSelectController', ['$scope', 'GameS
 
     $scope.create = function() {
         GameService.createGame().then(function(response) {
-            console.log('created');
             var gameurl = response
             $rootScope.components = angular.copy($rootScope.ips);
             $rootScope.components.game = $rootScope.components.game + gameurl;
             return gameurl;
         }).then(function(url) {
             return GameService.getGame().then(function(response) {
-                console.log(response);
-                var game = response.data;
+                var game = response;
                 $rootScope.components = game.components;
                 $rootScope.components.players = $rootScope.ips.game + game.players;
                 $scope.refresh();
-                $scope.join();
+                $scope.joinGame(game);
             });
         });
     };

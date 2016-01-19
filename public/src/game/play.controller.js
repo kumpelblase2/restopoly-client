@@ -1,4 +1,4 @@
-angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', 'wss', 'BoardService', function($scope, GameService, $rootScope, $stateParams, $state, wss, BoardService) {
+angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameService', '$rootScope', '$stateParams', '$state', 'wss', 'BoardService', '$q', 'BrokerService', function($scope, GameService, $rootScope, $stateParams, $state, wss, BoardService, $q, BrokerService) {
     $scope.gameid = $stateParams.id;
     $scope.game = {};
     $scope.board = {};
@@ -48,7 +48,8 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
                 var allPlaces = [];
                 $scope.board.fields.forEach(function(field) {
                     allPlaces.push(BoardService.getPlace(field.place).then(function(place) {
-                        return place.players = field.players;
+                        place.players = field.players;
+                        return place;
                     }));
                 });
                 return $q.all(allPlaces);
@@ -61,7 +62,9 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
                     }));
                 });
 
-                return $q.all(allOwners);
+                return $q.all(allOwners).then(function(places) {
+                    $scope.board.fields = places;
+                });
             });
         });
     };
@@ -79,8 +82,8 @@ angular.module('restopoly').controller('GamePlayController', ['$scope', 'GameSer
     };
 
     $scope.buy = function() {
-        var field = $scope.getCurrentField($scope.player);
-        BrokerService.buy(field, $scope.player).then(function() {
+        var field = $scope.getCurrentField($scope.board_player);
+        BrokerService.buy(field, $scope.board_player).then(function() {
             $scope.refresh();
         });
     };

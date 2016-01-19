@@ -8,7 +8,6 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
                 method: 'GET',
                 url: $rootScope.ips.game + '/games'
             }).then(function(response) {
-                console.log(response);
                 var games = [];
                 response.data.forEach(function(gameUrl) {
                     games.push(self.getGameByUrl(gameUrl));
@@ -33,8 +32,6 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
             }).then(function(response) { return response.data; });
         },
         joinGameByUrl: function(userid, username, url) {
-            console.log(url);
-            console.log($rootScope.ips.game);
             return $http({
                 method: 'PUT',
                 url: $rootScope.ips.game + url + '/' + userid + '?name=' + username + '&uri=http://localhost:3000/event/' + userid.toLowerCase()
