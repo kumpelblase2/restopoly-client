@@ -28,13 +28,13 @@ angular.module('restopoly').factory('GameService', ['$http', '$rootScope', '$q',
         joinGame: function(userid, username) {
             return $http({
                 method: 'PUT',
-                url: $rootScope.components.game + '/players/' + userid + '?name=' + username + '&uri=http://localhost:3000/event/' + userid.toLowerCase()
+                url: $rootScope.components.game + '/players/' + userid + '?name=' + username + '&uri=' + $rootScope.ips.my + '/event/' + userid.toLowerCase()
             }).then(function(response) { return response.data; });
         },
         joinGameByUrl: function(userid, username, url) {
             return $http({
                 method: 'PUT',
-                url: $rootScope.ips.game + url + '/' + userid + '?name=' + username + '&uri=http://localhost:3000/event/' + userid.toLowerCase()
+                url: $rootScope.ips.game + url + '/' + userid + '?name=' + username + '&uri=' + $rootScope.ips.my + '/event/' + userid.toLowerCase()
             }).then(function(response) { return response.data });
         },
         getPlayersByUrl: function(playersUrl) {

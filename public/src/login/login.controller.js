@@ -19,7 +19,8 @@ angular.module('restopoly').controller('LoginController', ['$scope', '$rootScope
             board: $scope.boards_ip,
             dice: $scope.dice_ip,
             broker: $scope.broker_ip,
-            bank: $scope.bank_ip
+            bank: $scope.bank_ip,
+            my: $scope.my_ip
         }
 
         $cookies.putObject('user', $rootScope.user);
